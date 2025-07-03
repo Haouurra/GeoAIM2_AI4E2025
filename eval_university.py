@@ -64,7 +64,6 @@ if __name__ == '__main__':
         
     print("\nModel: {}".format(config.model))
 
-
     model = TimmModel(config.model,
                           pretrained=True,
                           img_size=config.img_size)
@@ -80,6 +79,7 @@ if __name__ == '__main__':
     if config.checkpoint_start is not None:  
         print("Start from:", config.checkpoint_start)
         model_state_dict = torch.load(config.checkpoint_start)  
+        #model_state_dict = torch.load(config.checkpoint_start, map_location=torch.device('cpu'))
         model.load_state_dict(model_state_dict, strict=False)     
 
     # Data parallel
@@ -89,6 +89,7 @@ if __name__ == '__main__':
             
     # Model to device   
     model = model.to(config.device)
+    print(f"Model running on: {config.device}")
 
     print("\nImage Size Query:", img_size)
     print("Image Size Ground:", img_size)
@@ -143,4 +144,3 @@ if __name__ == '__main__':
                        ranks=[1, 5, 10],
                        step_size=1000,
                        cleanup=True)
- 
